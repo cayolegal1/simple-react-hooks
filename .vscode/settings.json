@@ -2,6 +2,6 @@
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "always",
       "source.fixAll.ts": "always",
-      "source.addMissingImports.ts": "always"
-    }
+      "source.addMissingImports.ts": "always",
+    },
 }
