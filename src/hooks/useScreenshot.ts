@@ -1,10 +1,7 @@
 import { useState, useCallback } from "react";
 import html2canvas, { type Options } from "html2canvas";
 
-const defaultConfig = {
-  scale: 0.8,
-  useCORS: true,
-};
+type HTML2CanvasOptions = Partial<Options>;
 
 export const useScreenshot = () => {
   const [image, setImage] = useState<string | undefined>(undefined);
@@ -33,20 +30,27 @@ export const useScreenshot = () => {
     return true;
   }, []);
 
-  const screenshot = useCallback(async (elementId: string, options: Partial<Options> = defaultConfig) => {
-    if (!isValid(elementId)) return;
-    try {
-      const element = document.getElementById(elementId);
-      if (element) {
-        const canvas = await html2canvas(element, options);
-        const imageData = canvas.toDataURL("image/png");
-        setImage(imageData);
+  const screenshot = useCallback(
+    async (elementId: string, options: HTML2CanvasOptions = {}) => {
+      if (!isValid(elementId)) return;
+      try {
+        const element = document.getElementById(elementId);
+        if (element) {
+          const canvas = await html2canvas(element, {
+            scale: 0.8,
+            useCORS: true,
+            ...options,
+          });
+          const imageData = canvas.toDataURL("image/png");
+          setImage(imageData);
+        }
+      } catch (error) {
+        setError(error);
+        setImage(undefined);
       }
-    } catch (error) {
-      setError(error);
-      setImage(undefined);
-    }
-  }, []);
+    },
+    []
+  );
 
   return {
     error,
