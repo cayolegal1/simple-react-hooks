@@ -6,6 +6,7 @@ export default mergeConfig(
   defineConfig({
     test: {
       globals: true,
+      passWithNoTests: true,
       coverage: {
         thresholds: {
           lines: 80,
