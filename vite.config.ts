@@ -15,11 +15,12 @@ export default defineConfig({
     sourcemap: true,
     target: "ESNext",
     rollupOptions: {
-      external: ["react", "react-dom"],
+      external: ["react", "react-dom", "html2canvas"],
       output: {
         globals: {
           react: "React",
           "react-dom": "ReactDOM",
+          html2canvas: "html2Canvas"
         },
       },
     },

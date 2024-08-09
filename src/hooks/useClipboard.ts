@@ -8,20 +8,24 @@ type UseClipboardProps = {
 export const useClipboard = ({ successDuration = 1000 }: UseClipboardProps = {}) => {
   const [copiedText, setCopiedText] = useState<string | undefined>(undefined);
   const [copied, setCopied] = useState(false);
-  const [error, setError] = useState<unknown>("");
+  const [error, setError] = useState<unknown>(undefined);
 
-  const copy = useCallback(async (text: string) => {
-
-    if (!navigator.clipboard) {
+  const isValid = useCallback((text: string) => {
+    if (!navigator || !navigator.clipboard) {
       setError("Navigator does not support clipboard api");
-      return;
+      return false;
     }
 
     if (!isString(text)) {
-      setError("Value is not text to copy to clipboard");
-      return;
+      setError("Value is not text to copy");
+      return false;
     }
 
+    return true;
+  }, []);
+
+  const copy = useCallback(async (text: string) => {
+    if (!isValid(text)) return;
     try {
       await navigator.clipboard.writeText(text);
       setCopiedText(text);
@@ -44,9 +48,9 @@ export const useClipboard = ({ successDuration = 1000 }: UseClipboardProps = {})
   }, [copiedText]);
 
   return {
+    copied,
     copiedText,
     copy,
     error,
-    copied,
   }
 };
