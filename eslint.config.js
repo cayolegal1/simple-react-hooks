@@ -8,7 +8,7 @@ import tseslint from "typescript-eslint";
 export default tseslint.config({
   extends: [js.configs.recommended, ...tseslint.configs.recommended],
   files: ["**/*.{ts,tsx}"],
-  ignores: ["dist"],
+  ignores: ["dist/**"],
   languageOptions: {
     ecmaVersion: 2020,
     globals: globals.browser,
@@ -20,6 +20,7 @@ export default tseslint.config({
   rules: {
     ...reactHooks.configs.recommended.rules,
     quotes: ["error", "double"],
+    "react-hooks/exhaustive-deps": "off",
     "react-refresh/only-export-components": [
       "warn",
       { allowConstantExport: true },
