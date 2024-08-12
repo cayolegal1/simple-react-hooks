@@ -3,7 +3,6 @@ import { useClipboard } from "@src/hooks";
 
 describe("useClipboard hook", () => {
   beforeEach(() => {
-    // Mock navigator.clipboard
     Object.assign(navigator, {
       clipboard: {
         writeText: vi.fn(),
