@@ -1,28 +1,29 @@
 import { useState, useCallback } from "react";
 import html2canvas, { type Options } from "html2canvas";
+import { isString } from "utilities-lib";
 
-type HTML2CanvasOptions = Partial<Options>;
+export type HTML2CanvasOptions = Partial<Options>;
 
 export const useScreenshot = () => {
-  const [image, setImage] = useState<string | undefined>(undefined);
+  const [result, setResult] = useState<string | undefined>(undefined);
   const [error, setError] = useState<unknown>(undefined);
 
-  const isValid = useCallback((elementId: string) => {
+  const canTakeScreenshot = useCallback((elementId: string) => {
     if (!document) {
-      setImage(undefined);
+      setResult(undefined);
       setError("Document is not available");
       return false;
     }
 
-    if (typeof elementId !== "string") {
-      setImage(undefined);
+    if (!isString(elementId)) {
+      setResult(undefined);
       setError("Element ID is not valid");
       return false;
     }
 
     const element = document.getElementById(elementId);
     if (!element) {
-      setImage(undefined);
+      setResult(undefined);
       setError("Element not found");
       return false;
     }
@@ -32,7 +33,7 @@ export const useScreenshot = () => {
 
   const screenshot = useCallback(
     async (elementId: string, options: HTML2CanvasOptions = {}) => {
-      if (!isValid(elementId)) return;
+      if (!canTakeScreenshot(elementId)) return;
       try {
         const element = document.getElementById(elementId);
         if (element) {
@@ -42,11 +43,11 @@ export const useScreenshot = () => {
             ...options,
           });
           const imageData = canvas.toDataURL("image/png");
-          setImage(imageData);
+          setResult(imageData);
         }
       } catch (error) {
         setError(error);
-        setImage(undefined);
+        setResult(undefined);
       }
     },
     []
@@ -54,7 +55,8 @@ export const useScreenshot = () => {
 
   return {
     error,
-    image,
+    result,
+    canTakeScreenshot,
     screenshot,
   };
 };
