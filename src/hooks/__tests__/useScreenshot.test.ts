@@ -9,7 +9,6 @@ vi.mock("html2canvas", () => ({
 }));
 
 beforeEach(() => {
-  // Limpia el DOM antes de cada prueba
   document.body.innerHTML = "";
 });
 
